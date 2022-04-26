@@ -1,16 +1,16 @@
 # Conditional build:
-%bcond_without	doc	# API documentation
+%bcond_with	doc	# API documentation
 %bcond_with	tests	# unit tests
 
 %define		module	deepdiff
 Summary:	Deep Difference and search of any Python object/data
 Name:		python3-%{module}
-Version:	5.6.0
-Release:	2
+Version:	5.8.0
+Release:	1
 License:	MIT
 Group:		Libraries/Python
 Source0:	https://pypi.debian.net/%{module}/%{module}-%{version}.tar.gz
-# Source0-md5:	a4ccc7101e5fce52b06bd3c1e89d113b
+# Source0-md5:	474848baf38d4aab64fafb1d57ddc466
 URL:		https://github.com/seperman/deepdiff
 BuildRequires:	python3-modules >= 1:3.2
 #BuildRequires:	python3-setuptools
