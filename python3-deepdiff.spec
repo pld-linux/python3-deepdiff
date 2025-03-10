@@ -6,7 +6,7 @@
 Summary:	Deep Difference and search of any Python object/data
 Name:		python3-%{module}
 Version:	5.8.0
-Release:	1
+Release:	2
 License:	MIT
 Group:		Libraries/Python
 Source0:	https://pypi.debian.net/%{module}/%{module}-%{version}.tar.gz
