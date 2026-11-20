@@ -5,24 +5,29 @@
 %define		module	deepdiff
 Summary:	Deep Difference and search of any Python object/data
 Name:		python3-%{module}
-Version:	5.8.0
-Release:	3
+Version:	8.6.2
+Release:	1
 License:	MIT
 Group:		Libraries/Python
-Source0:	https://pypi.debian.net/%{module}/%{module}-%{version}.tar.gz
-# Source0-md5:	474848baf38d4aab64fafb1d57ddc466
+#Source0Download: https://pypi.org/simple/deepdiff/
+Source0:	https://files.pythonhosted.org/packages/source/d/deepdiff/%{module}-%{version}.tar.gz
+# Source0-md5:	14d6e7aa4f0c86c9b80f7f1a9c33cad1
 URL:		https://github.com/seperman/deepdiff
-BuildRequires:	python3-modules >= 1:3.2
-#BuildRequires:	python3-setuptools
+BuildRequires:	python3-build
+BuildRequires:	python3-flit_core >= 3.11
+BuildRequires:	python3-flit_core < 4
+BuildRequires:	python3-installer
+BuildRequires:	python3-modules >= 1:3.9
 %if %{with tests}
 #BuildRequires:	python3-
 %endif
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.714
+BuildRequires:	rpmbuild(macros) >= 2.044
+BuildRequires:	sed >= 4.0
 %if %{with doc}
 BuildRequires:	sphinx-pdg-3
 %endif
-Requires:	python3-modules >= 1:3.2
+Requires:	python3-modules >= 1:3.9
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -46,8 +51,11 @@ Dokumentacja API modułu Pythona %{module}.
 %prep
 %setup -q -n %{module}-%{version}
 
+# library module, not a script
+%{__sed} -i -e "1{/^#!/d}" deepdiff/diff.py
+
 %build
-%py3_build
+%py3_build_pyproject
 
 %if %{with tests}
 # use explicit plugins list for reliable builds (delete PYTEST_PLUGINS if empty)
@@ -63,7 +71,7 @@ rm -rf docs/_build/html/_sources
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%py3_install
+%py3_install_pyproject
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -75,7 +83,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{py3_sitescriptdir}/%{module}
 %{py3_sitescriptdir}/%{module}/*.py
 %{py3_sitescriptdir}/%{module}/__pycache__
-%{py3_sitescriptdir}/%{module}-%{version}-py*.egg-info
+%{py3_sitescriptdir}/%{module}/py.typed
+%{py3_sitescriptdir}/%{module}-%{version}.dist-info
 
 %if %{with doc}
 %files apidocs
